@@ -1,0 +1,53 @@
+.about-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1d4e20;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: #379365;
+}
+
+.about-header p {
+  font-size: 18px;
+  color: #c5b59e;
+}
+
+.about-intro, .about-wildlife, .about-market {
+  margin-bottom: 30px;
+}
+
+.about-intro h2, .about-wildlife h2, .about-market h2 {
+  font-size: 28px;
+  color: #bcce6d;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #5582a0;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+.about-intro p, .about-wildlife p, .about-market p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.about-market img{
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    margin-bottom: 12px;
+  overflow: hidden;
+}
+.about-market h1{
+    font-size: 18px;
+}
