@@ -3,11 +3,14 @@ import './AddProduct.css'
 import upload_area from '../../assets/upload_area.png'
 
 const AddProduct = () => {
+
+
+
   return (
     <div className='add-product'>
         <div className='addproduct-itemfield'>
             <p>Product Title</p>
-            <input type="text" name='name' placeholder='Type here' />
+            <input  type="text" name='name' placeholder='Type here' />
         </div>
         <div className="addproduct-price">
             <div className="addproduct-itemfield">
@@ -32,9 +35,9 @@ const AddProduct = () => {
             <label htmlFor="file-input">
                 <img src={upload_area} className='addproduct-thumnail-img' alt="" />
             </label>
-            <input type="file" name='image'  id='file-input' hidden/>
+            <input  type="file" name='image'  id='file-input' hidden/>
         </div>
-        <button className='addproduct-btn'>ADD</button>
+        <button  className='addproduct-btn'>ADD</button>
     </div>
   )
 }
