@@ -1,35 +1,28 @@
 import React, { createContext, useState, useEffect } from "react";
-import all_product from "../Components/Assest/all_product";
+
 import axios from "axios";
 
 export const MarketContext = createContext(null);
 
 const getDefaultCart = () => {
   let cart = {};
-  for (let i = 0; i < all_product.length + 1; i++) cart[i] = 0;
+  for (let i = 0; i < 300 + 1; i++) cart[i] = 0;
   return cart;
 };
 
 const MarketContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState(getDefaultCart());
-  const userId = "user123"; // Replace with logged-in user id
+   const userId = "guest"; 
+const [all_product, setAll_Product] = useState([]);
 
-  // Fetch cart from backend
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/cart/${userId}`);
-        const items = {};
-        res.data.items?.forEach(item => {
-          items[item.productId] = item.quantity;
-        });
-        setCartItems({ ...getDefaultCart(), ...items });
-      } catch (err) {
-        console.error("Failed to fetch cart", err);
-      }
-    };
-    fetchCart();
-  }, []);
+  const [cartItems, setCartItems] = useState(getDefaultCart());
+
+  
+
+useEffect(() => {
+  fetch("http://localhost:4000/allproducts")
+  .then((response) => response.json())
+  .then((data) => setAll_Product(data));
+}, []);
 
   // Add item
   const addToCart = async (itemId) => {
@@ -56,7 +49,7 @@ const MarketContextProvider = (props) => {
   const clearCart = async () => {
     setCartItems(getDefaultCart());
     try {
-      await axios.delete(`http://localhost:5000/cart/${userId}`);
+      await axios.delete(`http://localhost:4000/cart/${userId}`);
     } catch (err) {
       console.error("Failed to clear cart", err);
     }
@@ -68,7 +61,7 @@ const MarketContextProvider = (props) => {
       .filter(key => cart[key] > 0)
       .map(key => ({ productId: Number(key), quantity: cart[key] }));
     try {
-      await axios.post(`http://localhost:5000/cart/${userId}`, { items });
+      await axios.post(`http://localhost:4000/cart/${userId}`, { items });
     } catch (err) {
       console.error("Failed to sync cart", err);
     }
