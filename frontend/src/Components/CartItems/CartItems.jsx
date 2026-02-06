@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./CartItems.css";
-import { MarketContext } from "../../Context/MarketContext";
+import { ShopContext } from "../../Context/ShopContext";
 
 const CartItems = () => {
   const {
@@ -11,7 +11,7 @@ const CartItems = () => {
     deleteItemFromCart,
     clearCart,
     getTotalCartAmount,
-  } = useContext(MarketContext);
+  } = useContext(ShopContext);
 
   const cartHasItems = Object.values(cartItems).some(qty => qty > 0);
 

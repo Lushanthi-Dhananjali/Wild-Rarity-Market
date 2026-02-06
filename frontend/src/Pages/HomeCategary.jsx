@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import './CSS/HomeCategary.css'
-import { MarketContext } from '../Context/MarketContext'
+import { ShopContext } from '../Context/ShopContext'  
 import dropdown_icon from '../Components/Assest/dropdown_icon.png'
 import Item from '../Components/Item/Item'
 import RareAnimals from './RareAnimals'
@@ -11,7 +11,7 @@ import About from './About'
 
 
 const HomeCategary = (props) => {
-  const {all_product}= useContext(MarketContext);
+  const {all_product}= useContext(ShopContext);
   return (
     <div className='Home-Category'>
       <img className='HomeCategary-banner' src={props.banner} alt="" />

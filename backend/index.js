@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const { type } = require('os');
+const {error,log} = require('console');
 
 
 
@@ -86,7 +87,8 @@ app.post('/addproduct',async (req,res)=>{
     let id;
 
     if (products.length > 0) {
-        let last_product = products[products.length - 1];
+        let last_product_array = products.slice(-1);
+        let last_product = last_product_array[0];
         id = last_product.id + 1;
     } else {
         id = 1;
@@ -257,7 +259,7 @@ app.post('/removefromcart',fetchUser, async (req, res) => {
 })
 
 //creating end point to get cart data
-app.get('/getcart',fetchUser, async (req, res) => {
+app.post('/getcart',fetchUser, async (req, res) => {
     console.log("Getcart");
     let userData = await Users.findOne({_id:req.user.id});
     res.json(userData.cartData);

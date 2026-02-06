@@ -3,12 +3,12 @@ import './Navbar.css'
 import logo from '../Assest/logo.png'
 import cart_icon from '../Assest/cart_icon.png'
 import { Link } from 'react-router-dom'
-import { MarketContext } from '../../Context/MarketContext'
+import { ShopContext } from '../../Context/ShopContext'
 
 const Navbar = () => {
 
     const [menu,setMenu] = useState("home")
-    const{getTotalCartItems}= useContext(MarketContext);
+    const{getTotalCartItems}= useContext(ShopContext);
 
   return (
     <div className='navbar'>
