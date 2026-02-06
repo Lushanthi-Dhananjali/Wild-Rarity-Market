@@ -7,7 +7,8 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const { type } = require('os');
-const { Console } = require('console');
+
+
 
 app.use(express.json());
 app.use(cors());
@@ -34,7 +35,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // creating upload endpoint for images
-app.use('/images', express.static('upload/images'));
+app.use('/images', express.static('uploads/images'));
+
 app.post("/upload",upload.single("product"), (req, res) => {
     res.json({
         success: 1,
@@ -82,15 +84,15 @@ const Product = mongoose.model('Product', {
 app.post('/addproduct',async (req,res)=>{
     let products = await Product.find({});
     let id;
-    if(products.length==0)
-        {
-            let last_product_array = products.slice(-1);
-            let last_product = last_product_array[0];
-            id = last_product.id + 1;
-        }
-    else{
+
+    if (products.length > 0) {
+        let last_product = products[products.length - 1];
+        id = last_product.id + 1;
+    } else {
         id = 1;
     }
+
+
     const product = new Product({
         id : id,
         name : req.body.name,
@@ -101,7 +103,7 @@ app.post('/addproduct',async (req,res)=>{
     });
     console.log(product);
     await product.save();
-    Console.log("Saved");
+    console.log("Saved");
     res.json({
         success: true,  
         name: req.body.name,
@@ -217,8 +219,49 @@ app.get('/populer', async (req, res) => {
     res.send(populer);
 });
 
+//creating middleware to fetch user
+const fetchUser = async (req, res, next) => {
+    const token = req.header('auth-token');
+    if (!token) {
+        res.status(401).send({errors:"Please authenticate using a valid token"});
+    }
+    else {
+        try {
+            const data = jwt.verify(token, 'secret_ecom');
+            req.user = data.user;
+            next();
+        } catch (error) {
+            res.status(401).send({errors:"Please authenticate using a valid token"});
+        }
+    }
+
+} 
+
 //creating end point for adding products in cartdata
-app.post('/addtocart', async (req, res) => {});
+app.post('/addtocart',fetchUser, async (req, res) => {
+    console.log("added",req.body.itemId);
+    let userData = await Users.findOne({_id:req.user.id});
+    userData.cartData[req.body.itemId] += 1;
+    await Users.findByIdAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+    res.send("Added")
+});
+
+//creating end point for removing products from cartdata
+app.post('/removefromcart',fetchUser, async (req, res) => {
+    console.log("removed",req.body.itemId);
+    let userData = await Users.findOne({_id:req.user.id});
+    if(userData.cartData[req.body.itemId]>0)
+    userData.cartData[req.body.itemId] -= 1;
+    await Users.findByIdAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+    res.send("Removed")
+})
+
+//creating end point to get cart data
+app.get('/getcart',fetchUser, async (req, res) => {
+    console.log("Getcart");
+    let userData = await Users.findOne({_id:req.user.id});
+    res.json(userData.cartData);
+});
 
 app.listen(port, (error) => {
     if (!error) {

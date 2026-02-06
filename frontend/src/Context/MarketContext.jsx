@@ -22,20 +22,58 @@ useEffect(() => {
   fetch("http://localhost:4000/allproducts")
   .then((response) => response.json())
   .then((data) => setAll_Product(data));
+
+  if(localStorage.getItem('auth-token')){
+    fetch('http://localhost:4000/getcart',{
+      method:'POST',
+      headers:{
+        Accept:'application/form-data',
+        'auth-token':`${localStorage.getItem('auth-token')}`,
+        'Content-Type':'application/json'
+      },
+      body:"",
+    }).then((response) => response.json())
+    .then((data) => setCartItems(data));
+  }
 }, []);
 
   // Add item
   const addToCart = async (itemId) => {
     const newCart = { ...cartItems, [itemId]: cartItems[itemId] + 1 };
     setCartItems(newCart);
-    await syncCart(newCart);
+    if(localStorage.getItem('auth-token')){
+      fetch('http://localhost:4000/addtocart',{
+        method:'POST',
+        headers:{
+          Accept:'application/form-data',
+          'auth-token':`${localStorage.getItem('auth-token')}`,
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({"itemId":itemId}),
+      })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    }
   };
 
   // Remove item (decrement)
   const removeFromCart = async (itemId) => {
     const newCart = { ...cartItems, [itemId]: Math.max(cartItems[itemId] - 1, 0) };
     setCartItems(newCart);
-    await syncCart(newCart);
+
+    if(localStorage.getItem('auth-token')){
+      fetch('http://localhost:4000/removefromcart',{
+        method:'POST',
+        headers:{
+          Accept:'application/form-data',
+          'auth-token':`${localStorage.getItem('auth-token')}`,
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({"itemId":itemId}),
+      })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    }
   };
 
   // Delete item completely
