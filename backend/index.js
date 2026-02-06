@@ -204,10 +204,21 @@ app.post('/login', async (req, res) => {
 //creating endpoint for newcollection data
 app.get('/newcollection', async (req, res) => {
     let products = await Product.find({});
-    let newcollection =products.slice(1).slice(-8); 
+    let newcollection =products.slice(1).slice(-4); 
     console.log("Fetched New Collection");
     res.send(newcollection);
 });
+
+//creating endpoint for populer collection data
+app.get('/populer', async (req, res) => {
+    let products = await Product.find({category:"stamp"});
+    let populer =products.slice(0,4);
+    console.log("Fetched Populer Collection");
+    res.send(populer);
+});
+
+//creating end point for adding products in cartdata
+app.post('/addtocart', async (req, res) => {});
 
 app.listen(port, (error) => {
     if (!error) {
